@@ -18,35 +18,31 @@ class MainScreen extends StatelessWidget {
           builder: (context, state) {
             final loading = state.isLoading;
             final bloc = context.read<QRCodeBloc>();
+
             return GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(),
-                slivers: [
-                  SliverFillViewport(
-                    delegate: SliverChildListDelegate([
-                      Center(
-                        child: Container(
-                          padding: EdgeInsets.all(20.s),
-                          constraints: BoxConstraints(
-                            maxWidth: context.adaptive(
-                              mobile: double.infinity,
-                              tablet: 450.s,
-                              desktop: 500.s,
-                            ),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    padding: EdgeInsets.symmetric(vertical: 20.s),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                          maxWidth: context.adaptive(
+                            mobile: double.infinity,
+                            tablet: 450.s,
+                            desktop: 500.s,
                           ),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.all(20.s),
                           child: Column(
-                            mainAxisAlignment: .center,
-                            crossAxisAlignment: .stretch,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              const Spacer(),
-                              Align(
-                                alignment: Alignment.center,
-                                child: Image.asset(
-                                  'assets/logo/almajed2.png',
-                                  width: 150.i,
-                                ),
-                              ),
+                              Image.asset('assets/logo/almajed2.png', width: 150.i),
                               SizedBox(height: 10.s),
 
                               Text(
@@ -60,17 +56,13 @@ class MainScreen extends StatelessWidget {
                               ),
 
                               SizedBox(height: 20.s),
+
                               state.maybeMap(
                                 orElse: () => const SizedBox.shrink(),
-                                error: (e) {
-                                  return _StatusMessage(message: e.error, isError: true);
-                                },
-                                success: (s) {
-                                  return _StatusMessage(
-                                    message: s.message,
-                                    isError: false,
-                                  );
-                                },
+                                error: (e) =>
+                                    _StatusMessage(message: e.error, isError: true),
+                                success: (s) =>
+                                    _StatusMessage(message: s.message, isError: false),
                               ),
 
                               CustomTextForm(
@@ -81,6 +73,7 @@ class MainScreen extends StatelessWidget {
                                 icon: Icons.location_on_rounded,
                               ),
                               SizedBox(height: 20.s),
+
                               CustomTextForm(
                                 loading: loading,
                                 controller: bloc.branchNameController,
@@ -90,16 +83,15 @@ class MainScreen extends StatelessWidget {
                                 textInputAction: TextInputAction.done,
                               ),
                               SizedBox(height: 20.s),
-                              SubmitBtn(loading: loading, state: state),
 
-                              const Spacer(flex: 2),
+                              SubmitBtn(loading: loading, state: state),
                             ],
                           ),
                         ),
                       ),
-                    ]),
-                  ),
-                ],
+                    ),
+                  );
+                },
               ),
             );
           },

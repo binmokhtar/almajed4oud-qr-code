@@ -17,7 +17,7 @@ class MainScreen extends StatelessWidget {
         child: BlocBuilder<QRCodeBloc, QRCodeState>(
           builder: (context, state) {
             final loading = state.isLoading;
-            final bloc = context.read<QRCodeBloc>();
+            final bloc = context.bloc;
 
             return GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),
@@ -25,7 +25,7 @@ class MainScreen extends StatelessWidget {
                 builder: (context, constraints) {
                   return SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
-                    padding: EdgeInsets.symmetric(vertical: 20.s),
+                    // padding: EdgeInsets.symmetric(vertical: 20.s),
                     child: Center(
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
@@ -40,17 +40,15 @@ class MainScreen extends StatelessWidget {
                           padding: EdgeInsets.all(20.s),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Image.asset('assets/logo/almajed2.png', width: 150.i),
                               SizedBox(height: 10.s),
-
                               Text(
                                 'حياك الله يا غالي، كرمًا زودنا ببيانات فرعك عشان نجهز لك رمز التقييم الخاص بك',
                                 style: TextStyle(
                                   fontSize: 16.f,
-                                  color: Colors.blueGrey.shade700,
-                                  fontWeight: FontWeight.w500,
+                                  color: Colors.blueGrey.shade400,
                                 ),
                                 textAlign: TextAlign.center,
                               ),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:qr_code/bloc/qr_code_bloc.dart';
-import 'package:qr_code/screens/main_screen.dart';
+import 'package:qr_code/screens/splash.dart';
 import 'package:qr_code/services/responsive_services.dart';
 import 'package:qr_code/services/get_it_services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   dependencies();
-  runApp(const QRCode());
+  runApp(BlocProvider(create: (context) => QRCodeBloc(), child: const QRCode()));
 }
 
 class QRCode extends StatelessWidget {
@@ -29,6 +29,6 @@ class QRCode extends StatelessWidget {
       },
     ),
 
-    home: BlocProvider(create: (context) => QRCodeBloc(), child: const MainScreen()),
+    home: const SplashScreen(),
   );
 }

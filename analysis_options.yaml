@@ -1,0 +1,30 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    avoid_print: true
+    prefer_single_quotes: true
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_const_constructors_in_immutables: true
+    always_declare_return_types: true
+    curly_braces_in_flow_control_structures: true
+    unnecessary_this: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    avoid_returning_null_for_future: true
+    use_key_in_widget_constructors: true
+    sized_box_for_whitespace: true
+    avoid_unnecessary_containers: true
+    sort_child_properties_last: true
+    avoid_init_to_null: true
+    type_annotate_public_apis: true
+    annotate_overrides: true
+    avoid_empty_else: true
+    avoid_field_initializers_in_const_classes: true
+    avoid_classes_with_only_static_members: false
+
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
+    empty_catches: ignore

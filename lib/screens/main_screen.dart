@@ -123,7 +123,7 @@ class _GreetingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      'حياك الله يا غالي، كرمًا زودنا ببيانات فرعك عشان نجهز لك رمز التقييم الخاص بك',
+      'إنشاء رمز ال QR-Code (A5) لتقييم الفروع',
       style: TextStyle(
         fontSize: 16.f,
         color: Colors.blueGrey.shade400,
@@ -155,7 +155,6 @@ class _StatusMessage extends StatelessWidget {
         style: TextStyle(
           fontSize: 14.f,
           color: isError ? Colors.red.shade700 : Colors.green.shade700,
-          fontWeight: FontWeight.bold,
         ),
         textAlign: TextAlign.center,
       ),

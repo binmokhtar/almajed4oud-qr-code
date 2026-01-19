@@ -147,7 +147,7 @@ class _StatusMessage extends StatelessWidget {
       width: double.infinity,
       margin: .only(bottom: 20.s),
       decoration: BoxDecoration(
-        color: isError ? Colors.red.withAlpha(10) : Colors.green.withAlpha(10),
+        color: isError ? Colors.red.withAlpha(20) : Colors.green.withAlpha(20),
         borderRadius: BorderRadius.circular(12.r),
       ),
       child: Text(

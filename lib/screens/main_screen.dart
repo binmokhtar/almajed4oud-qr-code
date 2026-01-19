@@ -17,14 +17,13 @@ class MainScreen extends StatelessWidget {
         final focus = FocusManager.instance.primaryFocus;
         if (focus != null) {
           focus.unfocus();
-
           await Future.delayed(const Duration(milliseconds: 100));
           return;
         }
         Navigator.of(context).maybePop(result);
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: Directionality(
           textDirection: TextDirection.rtl,
           child: BlocBuilder<QRCodeBloc, QRCodeState>(
@@ -34,68 +33,56 @@ class MainScreen extends StatelessWidget {
               return GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
-                child: AnimatedPadding(
-                  duration: const Duration(milliseconds: 150),
-                  padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom,
-                  ),
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Center(
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              minHeight: constraints.maxHeight,
-                              maxWidth: context.adaptive(
-                                mobile: double.infinity,
-                                tablet: 450.s,
-                                desktop: 500.s,
-                              ),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Center(
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(
+                            minHeight: constraints.maxHeight,
+                            maxWidth: context.adaptive(
+                              mobile: double.infinity,
+                              tablet: 450.s,
+                              desktop: 500.s,
                             ),
-                            child: Padding(
-                              padding: EdgeInsets.all(20.s),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Image.asset('assets/logo/almajed2.png', width: 150.i),
-                                  SizedBox(height: 10.s),
-
-                                  const _GreetingWidget(),
-
-                                  SizedBox(height: 20.s),
-
-                                  _buildMessage(state),
-
-                                  CustomTextForm(
-                                    loading: loading,
-                                    controller: bloc.urlController,
-                                    label: 'عنوان الفرع (Google Maps)',
-                                    hint: 'https://maps.google.com/...',
-                                    icon: Icons.location_on_rounded,
-                                  ),
-                                  SizedBox(height: 20.s),
-
-                                  CustomTextForm(
-                                    loading: loading,
-                                    controller: bloc.branchNameController,
-                                    label: 'إسم الفرع',
-                                    hint: 'السلام مول',
-                                    icon: Icons.store_rounded,
-                                    textInputAction: TextInputAction.done,
-                                  ),
-                                  SizedBox(height: 20.s),
-
-                                  SubmitBtn(loading: loading, state: state),
-                                ],
-                              ),
+                          ),
+                          child: Padding(
+                            padding: EdgeInsets.all(20.s),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Image.asset('assets/logo/almajed2.png', width: 150.i),
+                                SizedBox(height: 10.s),
+                                const _GreetingWidget(),
+                                SizedBox(height: 20.s),
+                                _buildMessage(state),
+                                CustomTextForm(
+                                  loading: loading,
+                                  controller: bloc.urlController,
+                                  label: 'عنوان الفرع (Google Maps)',
+                                  hint: 'https://maps.google.com/...',
+                                  icon: Icons.location_on_rounded,
+                                ),
+                                SizedBox(height: 20.s),
+                                CustomTextForm(
+                                  loading: loading,
+                                  controller: bloc.branchNameController,
+                                  label: 'إسم الفرع',
+                                  hint: 'السلام مول',
+                                  icon: Icons.store_rounded,
+                                  textInputAction: TextInputAction.done,
+                                ),
+                                SizedBox(height: 20.s),
+                                SubmitBtn(loading: loading, state: state),
+                              ],
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
               );
             },
@@ -137,6 +124,7 @@ class _StatusMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: .all(14.s),
+      width: context.width,
       margin: .only(bottom: 20.s),
       decoration: BoxDecoration(
         color: isError ? Colors.red.withAlpha(20) : Colors.green.withAlpha(20),

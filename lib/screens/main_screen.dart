@@ -26,12 +26,13 @@ class MainScreen extends StatelessWidget {
           SystemChannels.textInput.invokeMethod('TextInput.hide');
           return;
         }
+
         if (Navigator.of(context).canPop()) {
           Navigator.of(context).pop(result);
         }
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         body: Directionality(
           textDirection: TextDirection.rtl,
           child: BlocBuilder<QRCodeBloc, QRCodeState>(
@@ -92,11 +93,7 @@ class MainScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 30.s),
                             SubmitBtn(loading: loading, state: state),
-                            SizedBox(
-                              height: MediaQuery.of(context).viewInsets.bottom > 0
-                                  ? 100.s
-                                  : 20.s,
-                            ),
+                            SizedBox(height: 20.s),
                           ],
                         ),
                       ),
@@ -147,7 +144,7 @@ class _StatusMessage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: .all(14.s),
-      width: .infinity,
+      width: double.infinity,
       margin: .only(bottom: 20.s),
       decoration: BoxDecoration(
         color: isError ? Colors.red.withAlpha(10) : Colors.green.withAlpha(10),

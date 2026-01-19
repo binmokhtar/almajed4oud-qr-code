@@ -10,91 +10,119 @@ class MainScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Directionality(
-        textDirection: TextDirection.rtl,
-        child: BlocBuilder<QRCodeBloc, QRCodeState>(
-          builder: (context, state) {
-            final loading = state.isLoading;
-            final bloc = context.bloc;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+        final focus = FocusManager.instance.primaryFocus;
+        if (focus != null) {
+          focus.unfocus();
 
-            return GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    // padding: EdgeInsets.symmetric(vertical: 20.s),
-                    child: Center(
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(
-                          minHeight: constraints.maxHeight,
-                          maxWidth: context.adaptive(
-                            mobile: double.infinity,
-                            tablet: 450.s,
-                            desktop: 500.s,
+          await Future.delayed(const Duration(milliseconds: 100));
+          return;
+        }
+        Navigator.of(context).maybePop(result);
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Directionality(
+          textDirection: TextDirection.rtl,
+          child: BlocBuilder<QRCodeBloc, QRCodeState>(
+            builder: (context, state) {
+              final loading = state.isLoading;
+              final bloc = context.bloc;
+              return GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+                child: AnimatedPadding(
+                  duration: const Duration(milliseconds: 150),
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Center(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minHeight: constraints.maxHeight,
+                              maxWidth: context.adaptive(
+                                mobile: double.infinity,
+                                tablet: 450.s,
+                                desktop: 500.s,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: EdgeInsets.all(20.s),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Image.asset('assets/logo/almajed2.png', width: 150.i),
+                                  SizedBox(height: 10.s),
+
+                                  const _GreetingWidget(),
+
+                                  SizedBox(height: 20.s),
+
+                                  _buildMessage(state),
+
+                                  CustomTextForm(
+                                    loading: loading,
+                                    controller: bloc.urlController,
+                                    label: 'عنوان الفرع (Google Maps)',
+                                    hint: 'https://maps.google.com/...',
+                                    icon: Icons.location_on_rounded,
+                                  ),
+                                  SizedBox(height: 20.s),
+
+                                  CustomTextForm(
+                                    loading: loading,
+                                    controller: bloc.branchNameController,
+                                    label: 'إسم الفرع',
+                                    hint: 'السلام مول',
+                                    icon: Icons.store_rounded,
+                                    textInputAction: TextInputAction.done,
+                                  ),
+                                  SizedBox(height: 20.s),
+
+                                  SubmitBtn(loading: loading, state: state),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                        child: Padding(
-                          padding: EdgeInsets.all(20.s),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Image.asset('assets/logo/almajed2.png', width: 150.i),
-                              SizedBox(height: 10.s),
-                              Text(
-                                'حياك الله يا غالي، كرمًا زودنا ببيانات فرعك عشان نجهز لك رمز التقييم الخاص بك',
-                                style: TextStyle(
-                                  fontSize: 16.f,
-                                  color: Colors.blueGrey.shade400,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-
-                              SizedBox(height: 20.s),
-
-                              state.maybeMap(
-                                orElse: () => const SizedBox.shrink(),
-                                error: (e) =>
-                                    _StatusMessage(message: e.error, isError: true),
-                                success: (s) =>
-                                    _StatusMessage(message: s.message, isError: false),
-                              ),
-
-                              CustomTextForm(
-                                loading: loading,
-                                controller: bloc.urlController,
-                                label: 'عنوان الفرع (Google Maps)',
-                                hint: 'https://maps.google.com/...',
-                                icon: Icons.location_on_rounded,
-                              ),
-                              SizedBox(height: 20.s),
-
-                              CustomTextForm(
-                                loading: loading,
-                                controller: bloc.branchNameController,
-                                label: 'إسم الفرع',
-                                hint: 'السلام مول',
-                                icon: Icons.store_rounded,
-                                textInputAction: TextInputAction.done,
-                              ),
-                              SizedBox(height: 20.s),
-
-                              SubmitBtn(loading: loading, state: state),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
+                      );
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildMessage(QRCodeState state) {
+    return state.maybeMap(
+      orElse: () => const SizedBox.shrink(),
+      error: (e) => _StatusMessage(message: e.error, isError: true),
+      success: (s) => _StatusMessage(message: s.message, isError: false),
+    );
+  }
+}
+
+class _GreetingWidget extends StatelessWidget {
+  const _GreetingWidget();
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'حياك الله يا غالي، كرمًا زودنا ببيانات فرعك عشان نجهز لك رمز التقييم الخاص بك',
+      style: TextStyle(fontSize: 16.f, color: Colors.blueGrey.shade400),
+      textAlign: TextAlign.center,
     );
   }
 }
@@ -102,6 +130,7 @@ class MainScreen extends StatelessWidget {
 class _StatusMessage extends StatelessWidget {
   final String message;
   final bool isError;
+
   const _StatusMessage({required this.message, required this.isError});
 
   @override

@@ -146,13 +146,12 @@ class _StatusMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(14.s),
-      width: double.infinity,
-      margin: EdgeInsets.only(bottom: 20.s),
+      padding: .all(14.s),
+      width: .infinity,
+      margin: .only(bottom: 20.s),
       decoration: BoxDecoration(
-        color: isError ? Colors.red.withAlpha(20) : Colors.green.withAlpha(20),
+        color: isError ? Colors.red.withAlpha(10) : Colors.green.withAlpha(10),
         borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: isError ? Colors.red.shade200 : Colors.green.shade200),
       ),
       child: Text(
         message,
